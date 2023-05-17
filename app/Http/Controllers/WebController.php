@@ -52,4 +52,28 @@ class WebController extends Controller
                 "category"=>$category
             ]);
     }
+
+    public function cart(){
+        $products = session()->has("cart")?session()->get("cart"):[];
+        $categories = Category::limit(10)->get();
+        return view("cart",[
+            "products"=>$products,
+            "categories"=>$categories
+        ]);
+    }
+
+    public function addToCart(Product $product){
+        $cart = session()->has("cart")?session()->get("cart"):[];
+        foreach ($cart as $item){
+            if($item->id == $product->id){
+                $item->buy_qty = $item->buy_qty+1;
+                session(["cart"=>$cart]);
+                return redirect()->to("/cart");
+            }
+        }
+        $product->buy_qty = 1;
+        $cart[] = $product;
+        session(["cart"=>$cart]);
+        return redirect()->to("/cart");
+    }
 }
