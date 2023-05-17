@@ -62,16 +62,17 @@ class WebController extends Controller
         ]);
     }
 
-    public function addToCart(Product $product){
+    public function addToCart(Product $product,Request $request){
         $cart = session()->has("cart")?session()->get("cart"):[];
+        $qty = $request->has("qty")?$request->get("qty"):1;
         foreach ($cart as $item){
             if($item->id == $product->id){
-                $item->buy_qty = $item->buy_qty+1;
+                $item->buy_qty = $item->buy_qty+$qty;
                 session(["cart"=>$cart]);
                 return redirect()->to("/cart");
             }
         }
-        $product->buy_qty = 1;
+        $product->buy_qty = $qty;
         $cart[] = $product;
         session(["cart"=>$cart]);
         return redirect()->to("/cart");
