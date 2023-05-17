@@ -35,7 +35,7 @@
                                         </div>
                                     </td>
                                     <td class="shoping__cart__total">
-                                        ${{$item->price * 1}}
+                                        ${{$item->price * $item->buy_qty}}
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <span class="icon_close"></span>
