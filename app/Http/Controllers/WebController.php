@@ -37,4 +37,19 @@ class WebController extends Controller
             "products"=>$products
         ]);
     }
+
+    public function category(Category $category){
+//        $category = Category::find($id);
+//        if($category==null)
+//            return abort(404);
+//        $category = Category::findOrFail($id);
+        $products = Product::where("category_id",$category->id)->paginate(18);
+        $categories = Category::limit(10)->get();
+        return view("category",
+            [
+                "categories"=>$categories,
+                "products"=>$products,
+                "category"=>$category
+            ]);
+    }
 }

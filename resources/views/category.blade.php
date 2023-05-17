@@ -1,5 +1,5 @@
 @extends("layouts.layout")
-@section("title","Search: ".app("request")->input('q'))
+@section("title",$category->name)
 @section("main")
     <div class="row">
         <div class="col-lg-3 col-md-5">
