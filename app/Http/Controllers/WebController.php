@@ -7,7 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 class WebController extends Controller
 {
     public function home(){
@@ -100,11 +100,23 @@ class WebController extends Controller
     }
 
     public function placeOrder(Request $request){
+        $request->validate([
+            "firstname"=>"required",
+            "lastname"=>"required",
+            "address"=>"required",
+            "phone"=>"required|min:10|max:20",
+            "email"=>"required",
+        ],[
+            "required"=>"Vui lòng điền đầy đủ thông tin",
+            "min"=>"Phải nhập tối thiểu :min",
+            "max"=>"Nhập giá trị không vượt quá :max"
+        ]);
         $products = session()->has("cart")?session()->get("cart"):[];
         $total = 0;
         foreach ($products as $item){
             $total+= $item->price * $item->buy_qty;
         }
+
         $order = Order::create([
             "firstname"=>$request->get("firstname"),
             "lastname"=>$request->get("lastname"),
@@ -128,10 +140,53 @@ class WebController extends Controller
                 "price"=>$item->price
             ]);
         }
+
+        // thanh toan bang paypal
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => route('successTransaction',["order"=>$order->id]),
+                "cancel_url" => route('cancelTransaction',["order"=>$order->id]),
+            ],
+            "purchase_units" => [
+                0 => [
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => number_format($total,2)
+                    ]
+                ]
+            ]
+        ]);
+
+        if (isset($response['id']) && $response['id'] != null) {
+
+            // redirect to approve href
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return redirect()->away($links['href']);
+                }
+            }
+
+        }
+
+        // end
         return redirect()->to("/thank-you/".$order->id);
     }
 
     public function thankYou(Order $order){
 
+    }
+
+    public function successTransaction(Order $order,Request $request){
+        $order->update(["is_paid"=>true,"status"=>1]);// đã thanh toán, trạng thái về xác nhận
+        return redirect()->to("/thank-you/".$order->id);
+    }
+
+    public function cancelTransaction(Order $order,Request $request){
+        return redirect()->to("/thank-you/".$order->id);
     }
 }

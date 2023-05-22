@@ -20,12 +20,18 @@
                                     <div class="checkout__input">
                                         <p>Fist Name<span>*</span></p>
                                         <input name="firstname" type="text">
+                                        @error("firstname")
+                                        <p class="text-danger"><i>{{$message}}</i></p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Last Name<span>*</span></p>
                                         <input name="lastname" type="text">
+                                        @error("lastname")
+                                        <p class="text-danger"><i>{{$message}}</i></p>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -37,6 +43,9 @@
                                 <p>Address<span>*</span></p>
                                 <input name="address" type="text" placeholder="Street Address" class="checkout__input__add">
                                 <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
+                                @error("address")
+                                <p class="text-danger"><i>{{$message}}</i></p>
+                                @enderror
                             </div>
                             <div class="checkout__input">
                                 <p>Town/City<span>*</span></p>
@@ -55,12 +64,18 @@
                                     <div class="checkout__input">
                                         <p>Phone<span>*</span></p>
                                         <input name="phone" type="text">
+                                        @error("phone")
+                                        <p class="text-danger"><i>{{$message}}</i></p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
                                         <input name="email" type="email">
+                                        @error("email")
+                                        <p class="text-danger"><i>{{$message}}</i></p>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +128,7 @@
                                     ut labore et dolore magna aliqua.</p>
                                 <div class="checkout__input__checkbox">
                                     <label for="payment">
-                                        Check Payment
+                                        VN Pay
                                         <input type="checkbox" id="payment">
                                         <span class="checkmark"></span>
                                     </label>
@@ -122,6 +137,13 @@
                                     <label for="paypal">
                                         Paypal
                                         <input type="checkbox" id="paypal">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="checkout__input__checkbox">
+                                    <label for="paypal">
+                                        COD
+                                        <input type="checkbox" id="COD">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
