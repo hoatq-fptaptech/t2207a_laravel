@@ -106,6 +106,7 @@ class WebController extends Controller
             "address"=>"required",
             "phone"=>"required|min:10|max:20",
             "email"=>"required",
+            "payment_method"=>"required",
         ],[
             "required"=>"Vui lòng điền đầy đủ thông tin",
             "min"=>"Phải nhập tối thiểu :min",
@@ -128,7 +129,7 @@ class WebController extends Controller
             "phone"=>$request->get("phone"),
             "email"=>$request->get("email"),
             "total"=>$total,
-            "payment_method"=>"COD",
+            "payment_method"=>$request->get("payment_method"),
           //  "is_paid"=>false,
          //   "status"=>0,
         ]);
@@ -142,37 +143,40 @@ class WebController extends Controller
         }
 
         // thanh toan bang paypal
-        $provider = new PayPalClient;
-        $provider->setApiCredentials(config('paypal'));
-        $paypalToken = $provider->getAccessToken();
+        if($order->payment_method == "PAYPAL") {
+            $provider = new PayPalClient;
+            $provider->setApiCredentials(config('paypal'));
+            $paypalToken = $provider->getAccessToken();
 
-        $response = $provider->createOrder([
-            "intent" => "CAPTURE",
-            "application_context" => [
-                "return_url" => route('successTransaction',["order"=>$order->id]),
-                "cancel_url" => route('cancelTransaction',["order"=>$order->id]),
-            ],
-            "purchase_units" => [
-                0 => [
-                    "amount" => [
-                        "currency_code" => "USD",
-                        "value" => number_format($total,2)
+            $response = $provider->createOrder([
+                "intent" => "CAPTURE",
+                "application_context" => [
+                    "return_url" => route('successTransaction', ["order" => $order->id]),
+                    "cancel_url" => route('cancelTransaction', ["order" => $order->id]),
+                ],
+                "purchase_units" => [
+                    0 => [
+                        "amount" => [
+                            "currency_code" => "USD",
+                            "value" => number_format($total, 2)
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
 
-        if (isset($response['id']) && $response['id'] != null) {
+            if (isset($response['id']) && $response['id'] != null) {
 
-            // redirect to approve href
-            foreach ($response['links'] as $links) {
-                if ($links['rel'] == 'approve') {
-                    return redirect()->away($links['href']);
+                // redirect to approve href
+                foreach ($response['links'] as $links) {
+                    if ($links['rel'] == 'approve') {
+                        return redirect()->away($links['href']);
+                    }
                 }
+
             }
-
+        }else if($order->payment_method == "VNPAY"){
+            // thanh toan = vnpay
         }
-
         // end
         return redirect()->to("/thank-you/".$order->id);
     }
