@@ -26,6 +26,14 @@ class WebController extends Controller
         return view("shop");
     }
 
+    public function product(Product $product){
+        $categories = Category::limit(10)->get();
+        return view("product",[
+            "categories"=>$categories,
+            "product"=>$product
+        ]);
+    }
+
     public function search(Request $request){
         $q = $request->get("q");
         $limit = $request->has("limit")?$request->get("limit"):18;
@@ -141,7 +149,8 @@ class WebController extends Controller
                 "price"=>$item->price
             ]);
         }
-
+        // xoa gio hang
+        session()->forget("cart");
         // thanh toan bang paypal
         if($order->payment_method == "PAYPAL") {
             $provider = new PayPalClient;
@@ -158,7 +167,7 @@ class WebController extends Controller
                     0 => [
                         "amount" => [
                             "currency_code" => "USD",
-                            "value" => number_format($total, 2)
+                            "value" => number_format($total, 2,".","")
                         ]
                     ]
                 ]
@@ -182,7 +191,11 @@ class WebController extends Controller
     }
 
     public function thankYou(Order $order){
-
+        $categories = Category::limit(10)->get();
+        return view("thankyou",[
+            'order'=>$order,
+            "categories"=>$categories
+        ]);
     }
 
     public function successTransaction(Order $order,Request $request){

@@ -10,7 +10,7 @@
                     </ul>
                 </div>
                 <div class="product__item__text">
-                    <h6><a href="#">{{$item->name}}</a></h6>
+                    <h6><a href="{{url("/product",["product"=>$item->slug])}}">{{$item->name}}</a></h6>
                     <h5>${{$item->price}}</h5>
                 </div>
             </div>
