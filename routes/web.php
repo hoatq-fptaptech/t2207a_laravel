@@ -27,3 +27,7 @@ Route::get('success-transaction,{order}', [\App\Http\Controllers\WebController::
 Route::get('cancel-transaction/{order}', [\App\Http\Controllers\WebController::class, 'cancelTransaction'])->name('cancelTransaction');
 
 Route::get("/admin",[\App\Http\Controllers\AdminController::class,"dashboard"]);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

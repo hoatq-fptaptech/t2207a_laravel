@@ -21,3 +21,6 @@ yarn-error.log
 /storage
 /bootstrap
 /tests
+/resources/css
+/resources/js
+/resources/sass
