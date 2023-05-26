@@ -25,3 +25,5 @@ Route::post("/checkout",[\App\Http\Controllers\WebController::class,"placeOrder"
 Route::get("/thank-you/{order}",[\App\Http\Controllers\WebController::class,"thankYou"]);
 Route::get('success-transaction,{order}', [\App\Http\Controllers\WebController::class, 'successTransaction'])->name('successTransaction');
 Route::get('cancel-transaction/{order}', [\App\Http\Controllers\WebController::class, 'cancelTransaction'])->name('cancelTransaction');
+
+Route::get("/admin",[\App\Http\Controllers\AdminController::class,"dashboard"]);
