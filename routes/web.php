@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Auth::routes();
 
 Route::get('/',[\App\Http\Controllers\WebController::class,"home"]);
 Route::get("/shop",[\App\Http\Controllers\WebController::class,"shop"]);
@@ -26,8 +27,7 @@ Route::get("/thank-you/{order}",[\App\Http\Controllers\WebController::class,"tha
 Route::get('success-transaction,{order}', [\App\Http\Controllers\WebController::class, 'successTransaction'])->name('successTransaction');
 Route::get('cancel-transaction/{order}', [\App\Http\Controllers\WebController::class, 'cancelTransaction'])->name('cancelTransaction');
 
-Route::get("/admin",[\App\Http\Controllers\AdminController::class,"dashboard"]);
+Route::get("/admin",[\App\Http\Controllers\AdminController::class,"dashboard"])->middleware(["auth"]);
+Route::get("/admin/orders",[\App\Http\Controllers\AdminController::class,"orders"])->middleware(["auth"]);
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
