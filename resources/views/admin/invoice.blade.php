@@ -145,7 +145,7 @@
                        </b>
                         @switch($order->status)
                             @case(0)
-                                <a href="#" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                                <a href="{{url("admin/orders/confirm",["order"=>$order->id])}}" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
                                 Confirm
                                 </a>
                                 <a href="#" class="btn btn-danger float-right"><i class="far fa-credit-card"></i> Submit
