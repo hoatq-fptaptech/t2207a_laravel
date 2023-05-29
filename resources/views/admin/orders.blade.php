@@ -59,7 +59,7 @@
                                     @endswitch
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-outline-info">View</a>
+                                    <a href="{{url("/admin/orders",["order"=>$item->id])}}" class="btn btn-outline-info">View</a>
                                 </td>
                             </tr>
                         @endforeach

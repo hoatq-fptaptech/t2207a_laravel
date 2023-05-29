@@ -27,9 +27,11 @@ Route::get("/thank-you/{order}",[\App\Http\Controllers\WebController::class,"tha
 Route::get('success-transaction,{order}', [\App\Http\Controllers\WebController::class, 'successTransaction'])->name('successTransaction');
 Route::get('cancel-transaction/{order}', [\App\Http\Controllers\WebController::class, 'cancelTransaction'])->name('cancelTransaction');
 
-Route::prefix("/admin")->middleware(["auth"])->group(function (){
+Route::prefix("/admin")->middleware(["auth","admin"])->group(function (){
     Route::get("/",[\App\Http\Controllers\AdminController::class,"dashboard"]);
     Route::get("/orders",[\App\Http\Controllers\AdminController::class,"orders"]);
+    Route::get("/orders/{order}",[\App\Http\Controllers\AdminController::class,"invoice"]);
+    Route::get("/orders/confirm/{order}",[\App\Http\Controllers\AdminController::class,"confirm"]);
 });
 
 

@@ -18,4 +18,12 @@ class AdminController extends Controller
             "orders"=>$orders
         ]);
     }
+
+    public function invoice(Order $order){
+        return view("admin.invoice",["order"=>$order]);
+    }
+
+    public function confirm(Order $order){
+
+    }
 }
