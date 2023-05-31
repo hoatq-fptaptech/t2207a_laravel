@@ -41,6 +41,7 @@
                                 <td>{{$item->Category->name}}</td>
                                 <td>
                                     <a href="{{url("/admin/products",["product"=>$item->id])}}" class="btn btn-outline-info">Edit</a>
+                                    <a onclick="return confirm('Xoá sản phẩm?')" href="{{url("/admin/products/delete",["product"=>$item->id])}}" class="btn btn-outline-danger">Delete</a>
                                 </td>
                             </tr>
                         @endforeach

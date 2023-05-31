@@ -79,4 +79,9 @@ class AdminController extends Controller
         ]);
         return redirect()->to("/admin/products");
     }
+
+    public function productDelete(Product $product){
+        $product->delete();
+        return redirect()->to("/admin/products");
+    }
 }
