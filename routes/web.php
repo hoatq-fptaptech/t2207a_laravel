@@ -32,6 +32,10 @@ Route::prefix("/admin")->middleware(["auth","admin"])->group(function (){
     Route::get("/orders",[\App\Http\Controllers\AdminController::class,"orders"]);
     Route::get("/orders/{order}",[\App\Http\Controllers\AdminController::class,"invoice"]);
     Route::get("/orders/confirm/{order}",[\App\Http\Controllers\AdminController::class,"confirm"]);
+
+    Route::get("/products",[\App\Http\Controllers\AdminController::class,"products"]);
+    Route::get("/products/create",[\App\Http\Controllers\AdminController::class,"productCreate"]);
+    Route::post("/products/create",[\App\Http\Controllers\AdminController::class,"productSave"]);
 });
 
 
